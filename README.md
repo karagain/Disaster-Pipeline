@@ -11,6 +11,10 @@ The python version used is 3.6.3. The rest of the dependencies are included in r
 Data is not included since this should be run on proprietary data. 
 
 
+### Sources:
+All content in this project came from the documentation of the libraries used, the classes in udacity, and previous experience. 
+
+
 ### Instructions:
 1. Run the following commands in the project's root directory to set up your database and model.
 
