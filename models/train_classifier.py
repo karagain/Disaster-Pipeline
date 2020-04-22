@@ -84,7 +84,7 @@ def evaluate_model(model, X_test, Y_test, category_names):
         print(classification_report(Y_test.iloc[:, i], pd.DataFrame(Y_pred).iloc[:, i]))
         
     print("\nBest Parameters:", model.best_params_)
-
+    # Best Parameters: {'clf__estimator__max_features': 'log2', 'clf__estimator__min_samples_split': 2}
 
 
 def save_model(model, model_filepath):
