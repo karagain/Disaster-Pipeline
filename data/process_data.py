@@ -26,6 +26,10 @@ def load_data(messages_filepath, categories_filepath):
     categories = pd.read_csv(categories_filepath)
     df = messages.merge(categories)
     
+    return df, messages, categories
+
+
+def clean_data(df, messages, categories):
     categories = categories.categories.str.split(";", expand=True)
     row = categories.iloc[0,:]
     category_colnames = [name[:-2] for name in row]
@@ -37,10 +41,7 @@ def load_data(messages_filepath, categories_filepath):
     df.drop("categories", axis=1, inplace=True)
     df = pd.concat([df, categories], axis=1)
     df.loc[df.related == 2, "related"] = 1
-    return df
 
-
-def clean_data(df):
     df = df.drop_duplicates()
     return df
 
@@ -59,10 +60,10 @@ def main():
 
         print('Loading data...\n    MESSAGES: {}\n    CATEGORIES: {}'
               .format(messages_filepath, categories_filepath))
-        df = load_data(messages_filepath, categories_filepath)
+        df, messages, categories = load_data(messages_filepath, categories_filepath)
 
         print('Cleaning data...')
-        df = clean_data(df)
+        df = clean_data(df, messages, categories)
         
         print('Saving data...\n    DATABASE: {}'.format(database_filepath))
         save_data(df, database_filepath)
