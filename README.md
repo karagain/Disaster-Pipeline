@@ -1,5 +1,16 @@
 # Disaster Response Pipeline Project
 
+### Purpose
+Create a webapp that uses a multioutput machine learning model, built on flask, and uploaded to Github. 
+The code should demonstrate ability to use Github, show ability to conduct ETL, building a Machine learning pipeline using NLP techniques, and the barebones of deploying a webapp locally. 
+
+
+### Requirements:
+The python version used is 3.6.3. The rest of the dependencies are included in requirements.txt. I formed the requirements to be minimal change form the packages that we were given in the class IDE. 
+
+Data is not included since this should be run on proprietary data. 
+
+
 ### Instructions:
 1. Run the following commands in the project's root directory to set up your database and model.
 
