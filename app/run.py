@@ -1,13 +1,15 @@
 import json
 import plotly
 import pandas as pd
+import numpy as np
 
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 
 from flask import Flask
 from flask import render_template, request, jsonify
-from plotly.graph_objs import Bar
+from plotly.graph_objs import Bar, Histogram, Heatmap
+# import plotly.graph_objs as go
 from sklearn.externals import joblib
 from sqlalchemy import create_engine
 
@@ -24,6 +26,7 @@ def tokenize(text):
         clean_tokens.append(clean_tok)
 
     return clean_tokens
+
 
 # load data
 engine = create_engine('sqlite:///../data/DisasterResponse.db')
@@ -43,6 +46,10 @@ def index():
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
     
+    category_counts = df[df.related==1].iloc[:, 5:].sum(axis=1)
+
+    heatmap_columns = df.columns[5:]
+    heatmap_data = np.array(df[df.related==1].iloc[:, 5:].corr().replace(1, 0))
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
     graphs = [
@@ -63,7 +70,47 @@ def index():
                     'title': "Genre"
                 }
             }
+        },
+        {
+            "data": [
+                Histogram(
+                    x=category_counts,
+                    xbins={
+                        "start":1, "end":35, "size":1
+                    },
+                )
+            ],
+            'layout': {
+                'title': 'Count of Categories for Messages',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "Number of Categories"
+                }
+            }
+        },
+        {
+            "data": [
+                Heatmap(
+                    x=heatmap_columns,
+                    y=heatmap_columns,
+                    z=heatmap_data
+                )
+            ],
+            'layout': {
+                'title': 'Correlation Heatmap of Categories',
+                'yaxis': {
+                    'title': "Categories",
+                    "automargin": True,
+                },
+                'xaxis': {
+                    'title': "Categories",
+                    "automargin": True,
+                }
+            }
         }
+
     ]
     
     # encode plotly graphs in JSON
